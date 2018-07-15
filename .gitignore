@@ -22,3 +22,6 @@ yarn-error.log*
 client/node_modules/
 client/public/jqwidgets/
 client/src/jqwidgets-react/
+package-lock.json
+yarn.lock
+.vscode/
