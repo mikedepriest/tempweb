@@ -4,25 +4,32 @@ import React, { Component } from 'react';
 import ReactTooltip from 'react-tooltip';
 
 import './App.css';
-// import the component
-//import ReactSpeedometer from "react-d3-speedometer";
 import JqxLinearGauge from './jqwidgets-react/react_jqxlineargauge.js';
 
+// Global constants
+const sensorsUrl = 'http://192.168.0.53:5000/v1/sensors';
+const sensorReadingsUrl = 'http://192.168.0.53:5000/v1/sensorreadings';
+const sensorsMaxCount = 10;
 
 class App extends Component {
   
   constructor(props) {
     super(props);
+    
     this.state = {
       response: '',
-      isLoaded: false,
-      sensorreadings: [],
       error: false,
+      isLoaded: false,
+      sensors: [],
+      sensorReadings: [],
+      displayConfig: {
+
+      }
     };
-    // Create space for 10 sensors by default
+    // Create space for sensors
     var i=0;
-    for (i=0; i<10; i++) {
-      this.state.sensorreadings.push(
+    for (i=0; i<sensorsMaxCount; i++) {
+      this.state.sensorReadings.push(
         {
 	        "PublishTimestamp":"",
           "SensorId":"",
@@ -46,13 +53,13 @@ class App extends Component {
   loadData() {
     this.setState({ isLoaded: false, error: false });
     console.log(Date.now()+': reading api');
-    fetch('http://192.168.0.53:5000/sensorreadings')
+    fetch(sensorReadingsUrl)
     .then(response => response.json())
     .then(
       (result) => {
         this.setState({
           isLoaded: true,
-          sensorreadings: result.sensorreadings
+          sensorReadings: result.sensorreadings
         });
       },
       // Note: it's important to handle errors here
@@ -67,13 +74,13 @@ class App extends Component {
     )
   }
 
-  renderSpeedo(sensorreading) {
-    var temp = sensorreading.Temperature;
+  renderSpeedo(sensorReading) {
+    var temp = sensorReading.Temperature;
     var tempR = temp.toFixed(1);
-    var uom = sensorreading.UOM;
-    var label = sensorreading.SensorName;
-    var desc = sensorreading.SensorDescription+'<br/>'+sensorreading.SensorId;
-    var sensorid = sensorreading.SensorId;
+    var uom = sensorReading.UOM;
+    var label = sensorReading.SensorName;
+    var desc = sensorReading.SensorDescription+'<br/>'+sensorReading.SensorId;
+    var sensorid = sensorReading.SensorId;
 
     let majorTicks = { size: '10%', interval: 10 };
         let minorTicks = { size: '5%', interval: 5, style: { 'stroke-width': 1, stroke: '#aaaaaa' } };
@@ -107,7 +114,7 @@ class App extends Component {
     return (
       <div className="App">
         {
-          this.state.sensorreadings.map((sensorreading) => this.renderSpeedo(sensorreading)) 
+          this.state.sensorReadings.map((sensorreading) => this.renderSpeedo(sensorreading)) 
         }
       </div>
     );
