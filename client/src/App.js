@@ -1,15 +1,29 @@
 /* jshint esversion: 6 */
 
 import React, { Component } from 'react';
-import ReactTooltip from 'react-tooltip';
+import TemperatureGaugeContainer from './TemperatureGaugeContainer';
 
 import './App.css';
-import JqxLinearGauge from './jqwidgets-react/react_jqxlineargauge.js';
 
 // Global constants
 const sensorsUrl = 'http://192.168.0.53:5000/v1/sensors';
-const sensorReadingsUrl = 'http://192.168.0.53:5000/v1/sensorreadings';
-const sensorsMaxCount = 10;
+const sensorReadingsUrl = 'http://192.168.0.53:5000/v1/sensorreadings/id/';
+const sensorReadingTemplate = {
+  "PublishTimestamp":"",
+  "SensorId":"",
+  "SensorName":"",
+  "SensorDescription":"",
+  "Temperature":0,
+  "UOM":""
+};
+const sensorLimitTemplate = {
+  "SensorId":"",
+  "LowLimit":50,
+  "LowAlarm":60,
+  "Target":70,
+  "HighAlarm":80,
+  "HighLimit":90
+};
 
 class App extends Component {
   
@@ -22,23 +36,14 @@ class App extends Component {
       isLoaded: false,
       sensors: [],
       sensorReadings: [],
+      sensorLimits: [],
       displayConfig: {
 
       }
     };
-    // Create space for sensors
-    var i=0;
-    for (i=0; i<sensorsMaxCount; i++) {
-      this.state.sensorReadings.push(
-        {
-	        "PublishTimestamp":"",
-          "SensorId":"",
-          "SensorName":"",
-          "SensorDescription":"",
-          "Temperature":0,
-          "UOM":""
-        });
-     };
+    // Initialize one sensor for display
+    this.state.sensorReadings.push(sensorReadingTemplate);
+    this.state.sensorLimits.push(sensorLimitTemplate);
   }
 
   componentDidMount() {
@@ -53,13 +58,13 @@ class App extends Component {
   loadData() {
     this.setState({ isLoaded: false, error: false });
     console.log(Date.now()+': reading api');
-    fetch(sensorReadingsUrl)
+    fetch(sensorsUrl)
     .then(response => response.json())
     .then(
       (result) => {
         this.setState({
           isLoaded: true,
-          sensorReadings: result.sensorreadings
+          sensors: result.sensorList
         });
       },
       // Note: it's important to handle errors here
@@ -74,47 +79,35 @@ class App extends Component {
     )
   }
 
-  renderSpeedo(sensorReading) {
-    var temp = sensorReading.Temperature;
-    var tempR = temp.toFixed(1);
-    var uom = sensorReading.UOM;
-    var label = sensorReading.SensorName;
-    var desc = sensorReading.SensorDescription+'<br/>'+sensorReading.SensorId;
-    var sensorid = sensorReading.SensorId;
+  handleSubmit(event) {
+    alert('A form was submitted');
+    event.preventDefault();
+  }
 
-    let majorTicks = { size: '10%', interval: 10 };
-        let minorTicks = { size: '5%', interval: 5, style: { 'stroke-width': 1, stroke: '#aaaaaa' } };
-        let ranges =
-            [
-                { startValue: 50, endValue: 60, style: { fill: '#FFF157', stroke: '#FFF157' } },
-                { startValue: 60, endValue: 75, style: { fill: '#FFA200', stroke: '#FFA200' } },
-            ];
+  handleChange(event) {
+    alert('A key was pressed');
+  }
+
+  renderGaugeController(sensor) {
+    var sensorid = sensor.SensorId;
+
     if(this.state.isLoaded) {
      return (
-      <div className="LinearGauge">
-        <JqxLinearGauge
-          min={0} max={100} value={temp}
-          pointer={{ pointerType: 'arrow', size: '20%' }}
-          colorScheme={'scheme05'} orientation={'vertical'}
-          labels={{ interval: 10 }} ticksMajor={majorTicks}
-          ticksMinor={minorTicks} ranges={ranges}
-        />
-        <p data-tip={desc} data-for={sensorid}>{label}</p>
-        <p>{tempR} {uom}</p>
-        <ReactTooltip multiline id={sensorid} />
-      </div>
+      <TemperatureGaugeContainer URL={sensorReadingsUrl} sensorId={sensorid} />
      );
     } else {
-     return (<div className="Speedo">Loading...</div>);
+     return (<p>Loading...</p>);
     }
   }
+
+  
 
   render() {
     
     return (
       <div className="App">
         {
-          this.state.sensorReadings.map((sensorreading) => this.renderSpeedo(sensorreading)) 
+          this.state.sensors.map((sensor) => this.renderGaugeController(sensor)) 
         }
       </div>
     );
