@@ -5,17 +5,35 @@ import JqxLinearGauge from './jqwidgets-react/react_jqxlineargauge';
 
 export default class TemperatureGauge extends Component {
   
-    // constructor(props) {
-    //   super(props);
-    // };
+    constructor(props) {
+      super(props);
+      this.state = {
+        temp: 0
+      }
+    };
+
+    componentDidMount() {
+      this.setState();
+    }
+    shouldComponentUpdate(nextProps) {
+        return (this.props.sensorReading.Temperature !== nextProps.sensorReading.Temperature);
+    }
+
+    handleSubmit(event) {
+      alert('A form was submitted');
+      event.preventDefault();
+    }
+  
+    handleChange(event) {
+      alert('A key was pressed');
+    }
 
     render() {
-        var temp = this.props.sensorReading.Temperature;
-        var tempR = temp.toFixed(1);
-        var uom =  this.props.sensorReading.UOM;
-        var label =  this.props.sensorReading.SensorName;
-        var desc =  this.props.sensorReading.SensorDescription+'<br/>'+this.props.sensorReading.SensorId;
-        var sensorid =  this.props.sensorReading.SensorId;
+        let tempR = Number(this.props.sensorReading.Temperature.toFixed(1));
+        let uom =  this.props.sensorReading.UOM;
+        let label =  this.props.sensorReading.SensorName;
+        let desc =  this.props.sensorReading.SensorDescription+'<br/>'+this.props.sensorReading.SensorId;
+        let sensorid =  this.props.sensorReading.SensorId;
     
         let majorTicks = { size: '10%', interval: 10 };
             let minorTicks = { size: '5%', interval: 5, style: { 'stroke-width': 1, stroke: '#aaaaaa' } };
@@ -28,7 +46,7 @@ export default class TemperatureGauge extends Component {
           <div className="LinearGauge">
             <form id={sensorid}>
               <JqxLinearGauge
-                min={0} max={100} value={temp}
+                min={0} max={100} value={tempR}
                 pointer={{ pointerType: 'arrow', size: '20%' }}
                 colorScheme={'scheme05'} orientation={'vertical'}
                 labels={{ interval: 10 }} ticksMajor={majorTicks}
@@ -44,3 +62,4 @@ export default class TemperatureGauge extends Component {
         
     }
 }
+// <ReactTooltip multiline id={sensorid} />

@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import TemperatureGaugeContainer from './TemperatureGaugeContainer';
 
+
 import './App.css';
 
 // Global constants
@@ -47,7 +48,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.intervalId = setInterval(() => this.loadData(), 1000*60);
+    //this.intervalId = setInterval(() => this.loadData(), 1000*60);
     this.loadData(); // also load one immediately
   }
 

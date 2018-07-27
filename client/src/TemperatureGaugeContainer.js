@@ -49,20 +49,16 @@ export default class TemperatureGaugeContainer extends Component {
         )
     }
 
-    handleSubmit(event) {
-        alert('A form was submitted');
-        event.preventDefault();
-    }
     
-    handleChange(event) {
-        alert('A key was pressed');
-    }
 
     render() {
-        return(
-            <TemperatureGauge sensorReading={this.state.lastSensorReading} />
-        );
+        if (this.state.isLoaded) {
+            return(<TemperatureGauge sensorReading={this.state.lastSensorReading} /> );
+        } else {
+            return(null);
+        }
     }
+    
 
 }
 
