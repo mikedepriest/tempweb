@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactTooltip from 'react-tooltip';
-
+import Collapsible from 'react-collapsible';
 import JqxLinearGauge from './jqwidgets-react/react_jqxlineargauge';
 
 export default class TemperatureGauge extends Component {
@@ -31,6 +31,7 @@ export default class TemperatureGauge extends Component {
     render() {
         let tempR = Number(this.props.sensorReading.Temperature.toFixed(1));
         let uom =  this.props.sensorReading.UOM;
+        let tlabel = tempR+" "+uom;
         let label =  this.props.sensorReading.SensorName;
         let desc =  this.props.sensorReading.SensorDescription+'<br/>'+this.props.sensorReading.SensorId;
         let sensorid =  this.props.sensorReading.SensorId;
@@ -53,9 +54,14 @@ export default class TemperatureGauge extends Component {
                 ticksMinor={minorTicks} ranges={ranges}
               />
               <p data-tip={desc} data-for={sensorid}>{label}</p>
-              <p>{tempR} {uom}</p>
               <ReactTooltip multiline id={sensorid} />
-              <input type="text" value={sensorid}/>
+              <Collapsible trigger={tlabel}>
+                
+                <p>{tempR} {uom}</p>
+                <input type="text" value={sensorid}/>
+               
+                
+              </Collapsible>
             </form>
           </div>
          );

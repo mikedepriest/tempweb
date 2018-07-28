@@ -33,3 +33,37 @@
   margin: auto;
   text-align: center
 }
+.Collapsible {
+  background-color: white; 
+}
+
+.Collapsible__contentInner {
+  padding: 10px;
+  border: 1px solid #ebebeb;
+  border-top: 0; 
+}
+
+.Collapsible__contentInner p {
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 20px; 
+}
+
+.Collapsible__contentInner p:last-child {
+      margin-bottom: 0; 
+}
+
+.Collapsible__trigger {
+  display: block;
+  font-weight: 400;
+  text-decoration: none;
+  /* color: #333333; */
+  position: relative;
+  border: 2px outset black;
+  border-radius: 20px;
+  padding: 10px;
+  background: #00ac9d;
+  color: white; 
+
+  
+}
