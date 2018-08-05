@@ -7,14 +7,20 @@ export default class TemperatureGaugeContainer extends Component {
         
         this.state = {
             isLoaded: false,
-            lastSensorReading: {
+            lastSensorReading: [{
                 "PublishTimestamp":"",
                 "SensorId":"",
                 "SensorName":"",
                 "SensorDescription":"",
                 "Temperature":0,
-                "UOM":""
-            },
+                "UOM":"",
+                "Max":9999,
+                "UCL":0,
+                "UWL":0,
+                "LWL":0,
+                "LCL":0,
+                "Min":-9999,
+            }],
             sensorReadingUrl: this.props.URL+this.props.sensorId
         };
     };
@@ -29,8 +35,8 @@ export default class TemperatureGaugeContainer extends Component {
     }
 
     loadData() {
-        this.setState({ isLoaded: false, error: false });
-        console.log(Date.now()+': reading api');
+        this.setState({ error: false });
+        console.log('temperaturegaugecontainer.js: reading api for sensor '+this.props.sensorId);
         fetch(this.state.sensorReadingUrl)
         .then(response => response.json())
         .then(
@@ -48,8 +54,6 @@ export default class TemperatureGaugeContainer extends Component {
             }
         )
     }
-
-    
 
     render() {
         if (this.state.isLoaded) {

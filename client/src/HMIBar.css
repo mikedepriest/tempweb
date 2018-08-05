@@ -1,0 +1,28 @@
+
+.hmibarbox {
+    background-color: grey;
+    height: 150px;
+    width: 50px;
+    padding: 20px;
+    color: grey;
+  }
+
+.hmibarpointer {
+    float: right;
+    width: 0; 
+    height: 0; 
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent; 
+    border-right:10px solid blue;
+    background-color: transparent; 
+    z-index: 99;
+}
+
+.hmibarlifter {
+    float: right;
+    width: 20%; 
+    height: calc( var( --value ) * 1% );
+    color: white; 
+    background-color: white; 
+    z-index: 98;
+}

@@ -7,8 +7,10 @@ import TemperatureGaugeContainer from './TemperatureGaugeContainer';
 import './App.css';
 
 // Global constants
-const sensorsUrl = 'http://192.168.0.53:5000/v1/sensors';
-const sensorReadingsUrl = 'http://192.168.0.53:5000/v1/sensorreadings/id/';
+// const sensorsUrl = 'http://192.168.0.53:5000/v1/sensors';
+// const sensorReadingsUrl = 'http://192.168.0.53:5000/v1/sensorreadings/id/';
+const sensorsUrl = 'http://localhost:5001/v1/sensors';
+const sensorReadingsUrl = 'http://localhost:5001/v1/sensorreadings/id/';
 const sensorReadingTemplate = {
   "PublishTimestamp":"",
   "SensorId":"",
@@ -58,7 +60,7 @@ class App extends Component {
 
   loadData() {
     this.setState({ isLoaded: false, error: false });
-    console.log(Date.now()+': reading api');
+    console.log('app.js: reading sensors api');
     fetch(sensorsUrl)
     .then(response => response.json())
     .then(
@@ -89,7 +91,7 @@ class App extends Component {
     alert('A key was pressed');
   }
 
-  renderGaugeController(sensor) {
+  renderGaugeContainer(sensor) {
     var sensorid = sensor.SensorId;
 
     if(this.state.isLoaded) {
@@ -108,7 +110,7 @@ class App extends Component {
     return (
       <div className="App">
         {
-          this.state.sensors.map((sensor) => this.renderGaugeController(sensor)) 
+          this.state.sensors.map((sensor) => this.renderGaugeContainer(sensor)) 
         }
       </div>
     );
