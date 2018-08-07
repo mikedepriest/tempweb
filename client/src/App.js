@@ -7,10 +7,10 @@ import TemperatureGaugeContainer from './TemperatureGaugeContainer';
 import './App.css';
 
 // Global constants
-// const sensorsUrl = 'http://192.168.0.53:5000/v1/sensors';
-// const sensorReadingsUrl = 'http://192.168.0.53:5000/v1/sensorreadings/id/';
-const sensorsUrl = 'http://localhost:5001/v1/sensors';
-const sensorReadingsUrl = 'http://localhost:5001/v1/sensorreadings/id/';
+const sensorsUrl = 'http://192.168.0.53:5001/v1/sensors';
+const sensorReadingsUrl = 'http://192.168.0.53:5001/v1/sensorreadings/id/';
+// const sensorsUrl = 'http://localhost:5001/v1/sensors';
+// const sensorReadingsUrl = 'http://localhost:5001/v1/sensorreadings/id/';
 const sensorReadingTemplate = {
   "PublishTimestamp":"",
   "SensorId":"",

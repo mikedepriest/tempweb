@@ -107,6 +107,9 @@ export default class TemperatureGauge extends Component {
                 </p>               
                 <p>
                   Range Min: <input name='Min' type='number' value={this.state.sensorReading.Min} onChange={this.handleInputChange.bind(this)} />
+                </p>
+                <p>
+                  {this.state.sensorReading.PublishTimestamp}
                 </p>               
               </Collapsible>
             </form>
