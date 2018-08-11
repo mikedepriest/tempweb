@@ -22,9 +22,9 @@ export default class TemperatureGauge extends Component {
           "LCL":0,
           "Min":0
         },
+        //sensorReading: props.sensorReading,
         limitsChanged: false
       };
-
     };
 
     componentDidMount() {
@@ -39,7 +39,7 @@ export default class TemperatureGauge extends Component {
     }
   
     handleInputChange(e) {
-      let change = {}
+      let change = this.state.sensorReading;
       change[e.target.name] = Number(e.target.value);
       this.setState(change);
       this.setState({limitsChanged: true});
@@ -48,12 +48,14 @@ export default class TemperatureGauge extends Component {
     }
 
     render() {
-        let tempR = Number(this.state.sensorReading.Temperature.toFixed(1));
-        let uom =  this.state.sensorReading.UOM;
+        let theReading = this.props.sensorReading;
+
+        let tempR = Number(theReading.Temperature.toFixed(1));
+        let uom =  theReading.UOM;
         let tlabel = tempR+" "+uom;
-        let label =  this.state.sensorReading.SensorName;
-        let desc =  this.state.sensorReading.SensorDescription+'<br/>'+this.state.sensorReading.SensorId;
-        let sensorid =  this.state.sensorReading.SensorId;
+        let label =  theReading.SensorName;
+        let desc =  theReading.SensorDescription+'<br/>'+theReading.SensorId;
+        let sensorid =  theReading.SensorId;
     
         //  let majorTicks = { size: '10%', interval: 10 };
         //  let minorTicks = { size: '5%', interval: 5, style: { 'stroke-width': 1, stroke: '#aaaaaa' } };
@@ -69,11 +71,11 @@ export default class TemperatureGauge extends Component {
         //       { startValue: this.state.uwl, endValue: this.state.ucl, style: { fill: 'yellow', stroke: 'yellow' } }, //UWL-UCL
         //   ];
         let buttonColor = 'red';
-        if ((tempR < this.state.sensorReading.LCL)) buttonColor='red';
-        if ((tempR >= this.state.sensorReading.LCL) && (tempR < this.state.sensorReading.LWL)) buttonColor='orange';
-        if ((tempR >= this.state.sensorReading.LWL) && (tempR < this.state.sensorReading.UWL)) buttonColor='green';
-        if ((tempR >= this.state.sensorReading.UWL) && (tempR <= this.state.sensorReading.UCL)) buttonColor='orange';
-        if ((tempR > this.state.sensorReading.UCL)) buttonColor='red';
+        if ((tempR < theReading.LCL)) buttonColor='red';
+        if ((tempR >= theReading.LCL) && (tempR < theReading.LWL)) buttonColor='orange';
+        if ((tempR >= theReading.LWL) && (tempR < theReading.UWL)) buttonColor='green';
+        if ((tempR >= theReading.UWL) && (tempR <= theReading.UCL)) buttonColor='orange';
+        if ((tempR > theReading.UCL)) buttonColor='red';
 
         // Human factors: white text against red and green, black otherwise
         let buttonTextColor='white';
@@ -83,33 +85,33 @@ export default class TemperatureGauge extends Component {
           <div className="LinearGauge">
             <form id={sensorid}>
             <HMIBar 
-              rangeMin={this.state.sensorReading.Min} rangeMax={this.state.sensorReading.Max} 
-              lcl={this.state.sensorReading.LCL} lwl={this.state.sensorReading.LWL} uwl={this.state.sensorReading.UWL} ucl={this.state.sensorReading.UCL}
+              rangeMin={theReading.Min} rangeMax={theReading.Max} 
+              lcl={theReading.LCL} lwl={theReading.LWL} uwl={theReading.UWL} ucl={theReading.UCL}
               value={tempR}
                />
               <p data-tip={desc} data-for={sensorid}>{label}</p>
               <ReactTooltip multiline id={sensorid} />
               <Collapsible trigger={tlabel} triggerStyle={{background: buttonColor, color: buttonTextColor}}>
                 <p>
-                  Range Max: <input name='Max' type='number' value={this.state.sensorReading.Max} onChange={this.handleInputChange.bind(this)} />
+                  Range Max: <input name='Max' type='number' style={{width: '4em'}} value={theReading.Max} onChange={this.handleInputChange.bind(this)} />
                 </p>               
                 <p>
-                  UCL: <input name='UCL' type='number' value={this.state.sensorReading.UCL} onChange={this.handleInputChange.bind(this)} />
+                  UCL: <input name='UCL' type='number' style={{width: '4em'}} value={theReading.UCL} onChange={this.handleInputChange.bind(this)} />
                 </p>               
                 <p>
-                  UWL: <input name='UWL' type='number' value={this.state.sensorReading.UWL} onChange={this.handleInputChange.bind(this)} />
+                  UWL: <input name='UWL' type='number' style={{width: '4em'}} value={theReading.UWL} onChange={this.handleInputChange.bind(this)} />
                 </p>               
                 <p>
-                  LWL: <input name='LWL' type='number' value={this.state.sensorReading.LWL} onChange={this.handleInputChange.bind(this)} />
+                  LWL: <input name='LWL' type='number' style={{width: '4em'}} value={theReading.LWL} onChange={this.handleInputChange.bind(this)} />
                 </p>               
                 <p>
-                  LCL: <input name='LCL' type='number' value={this.state.sensorReading.LCL} onChange={this.handleInputChange.bind(this)} />
+                  LCL: <input name='LCL' type='number' style={{width: '4em'}} value={theReading.LCL} onChange={this.handleInputChange.bind(this)} />
                 </p>               
                 <p>
-                  Range Min: <input name='Min' type='number' value={this.state.sensorReading.Min} onChange={this.handleInputChange.bind(this)} />
+                  Range Min: <input name='Min' type='number' style={{width: '4em'}} value={theReading.Min} onChange={this.handleInputChange.bind(this)} />
                 </p>
                 <p>
-                  {this.state.sensorReading.PublishTimestamp}
+                  {theReading.PublishTimestamp}
                 </p>               
               </Collapsible>
             </form>
