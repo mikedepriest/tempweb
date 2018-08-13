@@ -7,25 +7,24 @@ import TemperatureGaugeContainer from './TemperatureGaugeContainer';
 import './App.css';
 
 // Global constants
-const sensorsUrl = 'http://192.168.0.53:5001/v1/sensors';
-const sensorReadingsUrl = 'http://192.168.0.53:5001/v1/sensorreadings/id/';
-// const sensorsUrl = 'http://localhost:5001/v1/sensors';
-// const sensorReadingsUrl = 'http://localhost:5001/v1/sensorreadings/id/';
+const sensorHost = 'http://localhost:5001';
+// const sensorHost = 'http://192.168.0.53:5001';
+const sensorListApi = '/v1/sensors';
+const sensorChangeApi = '/v1/sensors/id/';
+const sensorReadingApi = '/v1/sensorreadings/id/';
 const sensorReadingTemplate = {
   "PublishTimestamp":"",
   "SensorId":"",
   "SensorName":"",
   "SensorDescription":"",
   "Temperature":0,
-  "UOM":""
-};
-const sensorLimitTemplate = {
-  "SensorId":"",
-  "LowLimit":50,
-  "LowAlarm":60,
-  "Target":70,
-  "HighAlarm":80,
-  "HighLimit":90
+  "UOM":"",
+  "Min":0,
+  "LCL":50,
+  "LWL":60,
+  "UWL":70,
+  "UCL":80,
+  "Max":90
 };
 
 class App extends Component {
@@ -39,29 +38,20 @@ class App extends Component {
       isLoaded: false,
       sensors: [],
       sensorReadings: [],
-      sensorLimits: [],
-      displayConfig: {
-
-      }
+      sensorsUrl: sensorHost+sensorListApi
     };
     // Initialize one sensor for display
     this.state.sensorReadings.push(sensorReadingTemplate);
-    this.state.sensorLimits.push(sensorLimitTemplate);
   }
 
   componentDidMount() {
-    //this.intervalId = setInterval(() => this.loadData(), 1000*60);
-    this.loadData(); // also load one immediately
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.intervalId);
+    this.loadData(); 
   }
 
   loadData() {
     this.setState({ isLoaded: false, error: false });
     console.log('app.js: reading sensors api');
-    fetch(sensorsUrl)
+    fetch(this.state.sensorsUrl)
     .then(response => response.json())
     .then(
       (result) => {
@@ -82,28 +72,17 @@ class App extends Component {
     )
   }
 
-  handleSubmit(event) {
-    alert('A form was submitted');
-    event.preventDefault();
-  }
-
-  handleChange(event) {
-    alert('A key was pressed');
-  }
-
   renderGaugeContainer(sensor) {
     var sensorid = sensor.SensorId;
 
     if(this.state.isLoaded) {
      return (
-      <TemperatureGaugeContainer URL={sensorReadingsUrl} sensorId={sensorid} />
+      <TemperatureGaugeContainer host={sensorHost} changeApi={sensorChangeApi} readingApi={sensorReadingApi} sensorId={sensorid} />
      );
     } else {
      return (<p>Loading...</p>);
     }
   }
-
-  
 
   render() {
     

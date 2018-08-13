@@ -25,3 +25,5 @@ client/src/jqwidgets-react/
 package-lock.json
 yarn.lock
 .vscode/
+client/public/jqwidgets-604/
+client/src/jqwidgets-react-604/
